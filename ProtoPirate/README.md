@@ -6,7 +6,8 @@
 
 This is a locally modified copy vendored into [Flipper-Stuff](https://github.com/SmokaJay/Flipper-Stuff),
 based on upstream [RocketGod-git/ProtoPirate](https://github.com/RocketGod-git/ProtoPirate)
-(GPLv3, see `LICENSE`). Upstream is unmodified except for one change:
+`main` branch, plus one correctness fix backported from the more current
+`zero-mega` branch (GPLv3, see `LICENSE`). Changes from plain upstream `main`:
 
 - **Auto-scan modulation.** Previously, `Hopping: ON` only stepped through
   frequencies (`helpers/protopirate_txrx.c`) while the AM/FM modulation
@@ -16,6 +17,12 @@ based on upstream [RocketGod-git/ProtoPirate](https://github.com/RocketGod-git/P
   Hopping ON is enough to scan across both frequency and modulation
   without touching those settings by hand. See `protopirate_hopper_update()`
   in `helpers/protopirate_txrx.c` for the change.
+- **Kia V1 CRC fix**, backported from `zero-mega`: `protocols/kia_v1.c` now
+  packs the high counter bits into the CRC field
+  (`instance->crc = cnt_high << 4 | crc;`) instead of dropping them, matching
+  the more current upstream branch. This is the only functional difference
+  between GitHub `main` and `zero-mega` as of this vendoring (the other diff
+  between those branches is a cosmetic `fap_version` string).
 
 Not modified: TX/emulation and the PSA brute-force tooling — both remain
 exactly as upstream, and TX/emulation is still disabled by default
